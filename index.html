@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tourmaline - A Simple Programming Language</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink: #FFB3D9;
+            --yellow: #FFF4A3;
+            --green: #B8F3B8;
+            --dark-pink: #FF85C1;
+            --dark-green: #7FE67F;
+            --text-dark: #333;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--pink) 0%, var(--yellow) 50%, var(--green) 100%);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo-container {
+            margin-bottom: 1.5rem;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--pink), var(--yellow), var(--green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--dark-pink), var(--dark-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .tagline {
+            font-size: 1.4rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .version {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--pink), var(--yellow));
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px rgba(255, 179, 217, 0.3);
+            margin-top: 1rem;
+        }
+
+        .github-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--dark-pink), var(--pink));
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(255, 133, 193, 0.4);
+        }
+
+        .github-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 133, 193, 0.6);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card h3 {
+            color: var(--dark-pink);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .examples-section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--dark-pink), var(--dark-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .example {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .example h3 {
+            color: var(--dark-pink);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .example-description {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 15px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-block .keyword {
+            color: var(--pink);
+        }
+
+        .code-block .function {
+            color: var(--yellow);
+        }
+
+        .code-block .string {
+            color: var(--green);
+        }
+
+        .code-block .comment {
+            color: #888;
+            font-style: italic;
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        footer p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, var(--yellow), var(--green));
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .code-block {
+                font-size: 0.85rem;
+            }
+        }
+
+        .installation-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .installation-section h2 {
+            color: var(--dark-pink);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .installation-section ol {
+            margin-left: 2rem;
+            color: var(--text-light);
+        }
+
+        .installation-section li {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="tourma.png" alt="Tourmaline Logo" style="max-width: 600px; height: auto;">
+        <p class="tagline">A simple, easy to learn programming language</p>
+        <div class="version">Version 0.4.0 - Pastel Crunch</div>
+        <a href="https://github.com/mochacinno-dev/Tourmaline" class="github-btn" target="_blank">
+            View on GitHub
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <h3>🎨 Beautiful Syntax</h3>
+                <p>Inspired by Lua and Ruby, Tourmaline features clean, readable syntax that's perfect for beginners and enjoyable for experts.</p>
+            </div>
+            <div class="feature-card">
+                <h3>🚀 Easy to Learn</h3>
+                <p>Start coding in minutes! Tourmaline's intuitive design makes programming accessible to everyone, regardless of experience level.</p>
+            </div>
+            <div class="feature-card">
+                <h3>💎 Powerful Features</h3>
+                <p>Despite its simplicity, Tourmaline includes lists, dictionaries, functions, loops, and all the tools you need for real projects.</p>
+            </div>
+        </div>
+
+        <div class="installation-section">
+            <h2>Getting Started</h2>
+            <ol>
+                <li>Clone the repository from GitHub</li>
+                <li>Save your code in a <span class="highlight">.trm</span> file</li>
+                <li>Run with: <code style="background: #f0f0f0; padding: 0.3rem 0.6rem; border-radius: 5px;">python tourmaline.py yourfile.trm</code> or after adding <code style="background: #f0f0f0; padding: 0.3rem 0.6rem; border-radius: 5px;">toma.bat</code> to path, <code style="background: #f0f0f0; padding: 0.3rem 0.6rem; border-radius: 5px;">toma yourfile.trm</code> </li> 
+            </ol>
+        </div>
+
+        <div class="examples-section">
+            <h2 class="section-title">Code Examples</h2>
+
+            <div class="example">
+                <h3>Hello World & Variables</h3>
+                <p class="example-description">Start with the basics - variables, strings, and output.</p>
+                <pre class="code-block"><span class="comment"># Your first Tourmaline program</span>
+<span class="keyword">let</span> name = <span class="string">"World"</span>
+<span class="function">print</span>(<span class="string">"Hello, "</span> + name + <span class="string">"!"</span>)
+
+<span class="keyword">let</span> x = <span class="string">42</span>
+<span class="keyword">let</span> y = <span class="string">3.14</span>
+<span class="keyword">let</span> is_awesome = <span class="string">true</span></pre>
+            </div>
+
+            <div class="example">
+                <h3>Functions</h3>
+                <p class="example-description">Create reusable code with functions.</p>
+                <pre class="code-block"><span class="keyword">function</span> <span class="function">greet</span>(person)
+    <span class="function">print</span>(<span class="string">"Hello, "</span> + person + <span class="string">"!"</span>)
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> <span class="function">add</span>(a, b)
+    <span class="keyword">let</span> result = a + b
+    <span class="function">print</span>(<span class="string">"Sum: "</span> + <span class="function">str</span>(result))
+<span class="keyword">end</span>
+
+<span class="function">greet</span>(<span class="string">"Alice"</span>)
+<span class="function">add</span>(<span class="string">10</span>, <span class="string">20</span>)</pre>
+            </div>
+
+            <div class="example">
+                <h3>Lists & Loops</h3>
+                <p class="example-description">Work with collections and iterate through them.</p>
+                <pre class="code-block"><span class="comment"># Lists are easy!</span>
+<span class="keyword">let</span> fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+
+<span class="keyword">for</span> fruit <span class="keyword">in</span> fruits
+    <span class="function">print</span>(fruit)
+<span class="keyword">end</span>
+
+<span class="comment"># While loops</span>
+<span class="keyword">let</span> counter = <span class="string">0</span>
+<span class="keyword">while</span> counter < <span class="string">5</span>
+    <span class="function">print</span>(<span class="string">"Count: "</span> + <span class="function">str</span>(counter))
+    counter += <span class="string">1</span>
+<span class="keyword">end</span></pre>
+            </div>
+
+            <div class="example">
+                <h3>Conditionals</h3>
+                <p class="example-description">Make decisions with if/elif/else statements.</p>
+                <pre class="code-block"><span class="keyword">let</span> score = <span class="string">85</span>
+
+<span class="keyword">if</span> score >= <span class="string">90</span>
+    <span class="function">print</span>(<span class="string">"Grade: A"</span>)
+<span class="keyword">elif</span> score >= <span class="string">80</span>
+    <span class="function">print</span>(<span class="string">"Grade: B"</span>)
+<span class="keyword">elif</span> score >= <span class="string">70</span>
+    <span class="function">print</span>(<span class="string">"Grade: C"</span>)
+<span class="keyword">else</span>
+    <span class="function">print</span>(<span class="string">"Grade: F"</span>)
+<span class="keyword">end</span></pre>
+            </div>
+
+            <div class="example">
+                <h3>Dictionaries</h3>
+                <p class="example-description">Store and access key-value pairs.</p>
+                <pre class="code-block"><span class="comment"># Create a dictionary</span>
+<span class="keyword">let</span> person = {<span class="string">"name"</span>: <span class="string">"Bob"</span>, <span class="string">"age"</span>: <span class="string">30</span>, <span class="string">"city"</span>: <span class="string">"NYC"</span>}
+
+<span class="function">print</span>(<span class="string">"Name: "</span> + person[<span class="string">"name"</span>])
+<span class="function">print</span>(<span class="string">"Age: "</span> + <span class="function">str</span>(person[<span class="string">"age"</span>]))
+<span class="function">print</span>(<span class="string">"City: "</span> + person[<span class="string">"city"</span>])</pre>
+            </div>
+
+            <div class="example">
+                <h3>Math Functions</h3>
+                <p class="example-description">Built-in mathematical operations for your calculations.</p>
+                <pre class="code-block"><span class="comment"># Math is built right in!</span>
+<span class="function">print</span>(<span class="function">sqrt</span>(<span class="string">16</span>))        <span class="comment"># 4.0</span>
+<span class="function">print</span>(<span class="function">pow</span>(<span class="string">2</span>, <span class="string">3</span>))      <span class="comment"># 8</span>
+<span class="function">print</span>(<span class="function">abs</span>(<span class="string">-5</span>))        <span class="comment"># 5</span>
+<span class="function">print</span>(<span class="function">min</span>(<span class="string">3</span>, <span class="string">7</span>, <span class="string">2</span>))  <span class="comment"># 2</span>
+<span class="function">print</span>(<span class="function">max</span>(<span class="string">3</span>, <span class="string">7</span>, <span class="string">2</span>))  <span class="comment"># 7</span>
+<span class="function">print</span>(<span class="function">floor</span>(<span class="string">3.7</span>))     <span class="comment"># 3</span>
+<span class="function">print</span>(<span class="function">ceil</span>(<span class="string">3.2</span>))      <span class="comment"># 4</span></pre>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made by <strong>The Mocha Foundation</strong></p>
+    </footer>
+</body>
+</html>
